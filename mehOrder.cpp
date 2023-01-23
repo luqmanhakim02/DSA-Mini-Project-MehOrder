@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <ctime>
+#include <unistd.h>
 
 using namespace std;
 
@@ -85,12 +86,15 @@ public:
     int getRear();
 };
 
+void mehOrderAnimation();
+void makimaKitchen();
 int main()
 {
     system("color 0B");
     MenuList listMenu;
-    
-
+    mehOrderAnimation();
+    makimaKitchen();
+    system("PAUSE");
     Menu *ayam = new Menu;
     ayam->category = "Kategori1";
     ayam->description = "ayam goreng";
@@ -112,21 +116,18 @@ int main()
     listMenu.insertNode(ayam);
     listMenu.insertNode(ikan);
     listMenu.insertNode(itik);
-    //listMenu.deleteNode();
-    //listMenu.editNode();
-    //listMenu.displayList();
-
-
+    // listMenu.deleteNode();
+    // listMenu.editNode();
+    // listMenu.displayList();
 
     int customer = 0;
     Customer cus[2];
 
-    while(customer<2 && customer >= 0)
+    while (customer < 2 && customer >= 0)
     {
         cus[customer].create();
         customer++;
     }
-    
 
     system("PAUSE");
 }
@@ -223,7 +224,7 @@ void Customer::create()
 {
     system("cls");
 
-    //cin.ignore();
+    // cin.ignore();
     cout << "+------------------------------------+" << endl;
     cout << "+     Create  Customer's Account     +" << endl;
     cout << "+------------------------------------+" << endl;
@@ -424,3 +425,45 @@ void MenuList::displayList()
     cout << endl;
     cout << endl;
 };
+
+void mehOrderAnimation()
+{
+    cout << endl;
+    cout << "   /$$      /$$ /$$$$$$$$ /$$   /$$        /$$$$$$  /$$$$$$$  /$$$$$$$  /$$$$$$$$ /$$$$$$$        /$$" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$$    /$$$| $$_____/| $$  | $$       /$$__  $$| $$__  $$| $$__  $$| $$_____/| $$__  $$      | $$" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$$$  /$$$$| $$      | $$  | $$      | $$  \\ $$| $$  \\ $$| $$  \\ $$| $$      | $$  \\ $$      | $$" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$ $$/$$ $$| $$$$$   | $$$$$$$$      | $$  | $$| $$$$$$$/| $$  | $$| $$$$$   | $$$$$$$/      | $$" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$  $$$| $$| $$__/   | $$__  $$      | $$  | $$| $$__  $$| $$  | $$| $$__/   | $$__  $$      |__/" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$\\  $ | $$| $$      | $$  | $$      | $$  | $$| $$  \\ $$| $$  | $$| $$      | $$  \\ $$" << endl
+         << flush;
+    sleep(1);
+    cout << "  | $$ \\/  | $$| $$$$$$$$| $$  | $$      |  $$$$$$/| $$  | $$| $$$$$$$/| $$$$$$$$| $$  | $$       /$$" << endl
+         << flush;
+    sleep(1);
+    cout << "  |__/     |__/|________/|__/  |__/       \\______/ |__/  |__/|_______/ |________/|__/  |__/      |__/" << endl
+         << flush;
+    cin.get();
+    system("CLS");
+};
+
+void makimaKitchen()
+{
+    cout << endl;
+    cout << " ___  ___  ___   _   __ _____ ___  ___  ___   _  _____   _   __ _____  _____  _____  _   _  _____  _   _ " << endl;
+    cout << " |  \\/  | / _ \\ | | / /|_   _||  \\/  | / _ \\ ( )/  ___| | | / /|_   _||_   _|/  __ \\| | | ||  ___|| \\ | |" << endl;
+    cout << " | .  . |/ /_\\ \\| |/ /   | |  | .  . |/ /_\\ \\|/ \\ `--.  | |/ /   | |    | |  | /  \\/| |_| || |__  |  \\| |" << endl;
+    cout << " | |\\/| ||  _  ||    \\   | |  | |\\/| ||  _  |    `--. \\ |    \\   | |    | |  | |    |  _  ||  __| | . ` |" << endl;
+    cout << " | |  | || | | || |\\  \\ _| |_ | |  | || | | |   /\\__/ / | |\\  \\ _| |_   | |  | \\__/\\| | | || |___ | |\\  |" << endl;
+    cout << " \\_|  |_/\\_| |_/\\_| \\_/ \\___/ \\_|  |_/\\_| |_/   \\____/  \\_| \\_/ \\___/   \\_/   \\____/\\_| |_/\\____/ \\_| \\_/" << endl;
+    cout << endl;
+}
