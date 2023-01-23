@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstring>
 #include <ctime>
 
 using namespace std;
@@ -74,20 +75,21 @@ public:
 class OrderQueue // Declaration of Queue (insertion etc)
 {
 public:
-Order *backPtr, frontPtr;
-void createQueue();
-void destroyQueue();
-bool isEmpty();
-void enQueue();
-void deQueue();
-int getFront();
-int getRear();
+    Order *backPtr, frontPtr;
+    void createQueue();
+    void destroyQueue();
+    bool isEmpty();
+    void enQueue();
+    void deQueue();
+    int getFront();
+    int getRear();
 };
 
 int main()
 {
     system("color 0B");
     MenuList listMenu;
+    
 
     Menu *ayam = new Menu;
     ayam->category = "Kategori1";
@@ -110,9 +112,22 @@ int main()
     listMenu.insertNode(ayam);
     listMenu.insertNode(ikan);
     listMenu.insertNode(itik);
-    listMenu.deleteNode();
-    listMenu.editNode();
-    listMenu.displayList();
+    //listMenu.deleteNode();
+    //listMenu.editNode();
+    //listMenu.displayList();
+
+
+
+    int customer = 0;
+    Customer cus[2];
+
+    while(customer<2 && customer >= 0)
+    {
+        cus[customer].create();
+        customer++;
+    }
+    
+
     system("PAUSE");
 }
 
@@ -208,7 +223,7 @@ void Customer::create()
 {
     system("cls");
 
-    cin.ignore();
+    //cin.ignore();
     cout << "+------------------------------------+" << endl;
     cout << "+     Create  Customer's Account     +" << endl;
     cout << "+------------------------------------+" << endl;
