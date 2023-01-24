@@ -76,19 +76,20 @@ public:
     string date;
     Menu cart;
     Customer cus;
+    Order *next;
 };
 
 class OrderQueue // Declaration of Queue (insertion etc)
 {
 public:
-    Order *backPtr, frontPtr;
+    Order *backPtr, *frontPtr;
     void createQueue();
     void destroyQueue();
     bool isEmpty();
     void enQueue();
     void deQueue();
-    int getFront();
-    int getRear();
+    Order getFront();
+    Order getRear();
 };
 
 RestaurantOwner::RestaurantOwner()
@@ -516,13 +517,90 @@ MenuList listOfMenu()
     return listMenu;
 }
 
+void OrderQueue::createQueue()
+{
+    backPtr = NULL;
+    frontPtr = NULL;
+}
+
+void OrderQueue::destroyQueue()
+{
+    Order *temp = frontPtr;
+    while (temp)
+    {
+        frontPtr = temp->next;
+        delete temp;
+        temp = frontPtr;
+    }
+}
+
+bool OrderQueue::isEmpty()
+{
+    return (frontPtr == NULL);
+}
+
+void OrderQueue::enQueue()
+{
+    Order *newPtr;
+    
+    if (isEmpty())
+    {
+        frontPtr = backPtr = newPtr;
+    }
+    else
+    {
+        newPtr->next = NULL;
+        backPtr->next = newPtr;
+        backPtr = newPtr; 
+    }
+}
+
+void OrderQueue::deQueue()
+{
+
+    if (isEmpty()) {
+        cout << "Queue is Empty" << endl;
+    }
+
+    Order *tempPtr;
+
+    tempPtr = frontPtr;
+    frontPtr = frontPtr->next;
+    tempPtr->next = NULL;
+
+     if (!frontPtr)
+        backPtr = NULL;
+    
+    delete tempPtr;
+}
+
+Order OrderQueue::getFront()
+{
+     if (isEmpty()) {
+        cout << "Queue is Empty" << endl;
+    }
+    return *frontPtr;
+}
+
+Order OrderQueue::getRear()
+{
+     if (isEmpty()) {
+        cout << "Queue is Empty" << endl;
+    }
+    return *backPtr;
+}
+
+
 int main()
 {
     int choice;
+    int proceed = 1;
+    int customer = 0;
     MenuList listMenu = listOfMenu();
     RestaurantOwner admin;
     Customer cus[MAX_CUS];
-    Order kitchenOrder;
+    //Order kitchenOrder;
+    OrderQueue kitchenOrder;
 
     system("color 0B");
     mehOrderAnimation();
@@ -544,8 +622,6 @@ menu_utama:
     cout << "OPTION --> ";
     cin >> choice;
 
-    int proceed = 1;
-    int customer = 0;
 
     while (proceed == 1)
     {
@@ -728,14 +804,25 @@ menu_utama:
                         cout << endl;
 
                         int menuIndex;
-                        cout << "Enter the menu index [1..." << listMenu.totalMenu() << "] you wish to order";
+                        cout << "Enter the menu index [1..." << listMenu.totalMenu() << "] you wish to order ";
                         cin >> menuIndex;
 
                         // kitchenOrder enqueue
+                       // Order *tempOrder = new Order;
                         // NEED TO ENQUEUE THE MENU
+
+                        Menu *temp = listMenu.head;
+                        int index;
+                        for (int i = 0; i < listMenu.totalMenu(); i++)
+                        {
+                            temp = new Menu(i);
+                            temp = temp->next;
+                        }
+                        
 
                         cout << "Thank you for your order. You can proceed to your cart for purchase purposes" << endl;
                         system("PAUSE");
+                        goto menu_utama;
                         break;
 
                     case 3:
