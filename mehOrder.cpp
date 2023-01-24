@@ -120,13 +120,62 @@ int main()
     // listMenu.editNode();
     // listMenu.displayList();
 
+    int choice;
+
+    menu_utama:
+    system("cls");
+
+    cout << "1. New Customer " << endl;
+    cout << "2. Existing Customer " << endl;
+    cout << "3. Exit " << endl;
+
+    cin >> choice;
+
+    int proceed = 1;
     int customer = 0;
     Customer cus[2];
 
-    while (customer < 2 && customer >= 0)
+
+    while (proceed == 1)
     {
-        cus[customer].create();
-        customer++;
+
+        switch (choice)
+        {
+            case 1:
+
+                cus[customer].create();
+                customer++;
+
+                cout << "Customer Details Added" << endl;
+                system("PAUSE"); 
+
+                goto menu_utama;
+            break;
+
+            case 2:
+
+                cout << "congratulation" << endl;
+                system("PAUSE");
+                goto menu_utama;
+            break;
+
+            case 3:
+                cout << "Thank you for using the system" << endl;
+                system("PAUSE");
+                proceed = 0;
+            break;
+
+            default:
+                cout << "Wrong Choice" << endl;
+                system("PAUSE");
+                goto menu_utama;
+            break;
+        }
+    }
+    
+    while (proceed == 0)
+    {
+        return 0;
     }
 
     system("PAUSE");
@@ -224,7 +273,7 @@ void Customer::create()
 {
     system("cls");
 
-    // cin.ignore();
+    cin.ignore();
     cout << "+------------------------------------+" << endl;
     cout << "+     Create  Customer's Account     +" << endl;
     cout << "+------------------------------------+" << endl;
