@@ -73,10 +73,12 @@ public:
 class Order // contain all items/variable
 {
 public:
-    string date;
-    Menu cart;
-    Customer cus;
+    string cart;
+    string customerName;
+    double cartPrice;
     Order *next;
+    Order();
+    Order(string, string, double);
 };
 
 class OrderQueue // Declaration of Queue (insertion etc)
@@ -86,10 +88,11 @@ public:
     void createQueue();
     void destroyQueue();
     bool isEmpty();
-    void enQueue();
+    void enQueue(string, string, double);
     void deQueue();
     Order getFront();
     Order getRear();
+    void display();
 };
 
 RestaurantOwner::RestaurantOwner()
@@ -97,99 +100,100 @@ RestaurantOwner::RestaurantOwner()
     restaurantName = "Makima's Kitchen";
     username = "admin00";    // admin username
     password = "dsaproject"; // admin password
-};
+}
 
 RestaurantOwner::RestaurantOwner(string rn, string un, string p)
 {
     restaurantName = rn;
     username = un;
     password = p;
-};
+}
 
 void RestaurantOwner::setrestaurantName(string rn)
 {
     restaurantName = rn;
-};
+}
 
 void RestaurantOwner::setusername(string un)
 {
     username = un;
-};
+}
 
 void RestaurantOwner::setpassword(string p)
 {
     password = p;
-};
+}
 
 string RestaurantOwner::getrestaurantName() const
 {
     return restaurantName;
-};
+}
 
 string RestaurantOwner::getusername() const
 {
     return username;
-};
+}
 
 string RestaurantOwner::getpassword() const
 {
     return password;
-};
+}
 
 Customer::Customer()
 {
     customerName = "";
     username = "";
     password = "";
-};
+}
 
 Customer::Customer(string cn, string un, string p)
 {
     customerName = cn;
     username = un;
     password = p;
-};
+}
 
 string Customer::getcustomerName() const
 {
     return customerName;
-};
+}
 
 string Customer::getusername() const
 {
     return username;
-};
+}
 
 string Customer::getpassword() const
 {
     return password;
-};
+}
 
 void Customer::setcustomerName(string cn)
 {
     customerName = cn;
-};
+}
 
 void Customer::setusername(string un)
 {
     username = un;
-};
+}
 
 void Customer::setpassword(string p)
 {
     password = p;
-};
+}
 
 void Customer::create()
 {
-    system("cls");
     int error = 0;
     cin.ignore();
     do
     {
-        cout << "+------------------------------------+" << endl;
-        cout << "+     Create  Customer's Account     +" << endl;
-        cout << "+------------------------------------+" << endl;
+        cout << "+--------------------------------------------+" << endl;
+        cout << "+--------------------------------------------+" << endl;
+        cout << "+-------- Create  Customer's Account --------+" << endl;
+        cout << "+--------------------------------------------+" << endl;
+        cout << "+--------------------------------------------+" << endl;
         cout << endl;
         cout << setw(20) << left << "Enter your name [eg: Luqman] : ";
         getline(cin, customerName);
@@ -210,7 +214,7 @@ void Customer::create()
             error = 0;
         }
     } while (error);
-};
+}
 
 Menu::Menu()
 {
@@ -219,7 +223,7 @@ Menu::Menu()
     foodPrice = 0;
     description = "";
     next = NULL;
-};
+}
 
 Menu::Menu(string cat, string name, double price, string desc)
 {
@@ -233,7 +237,7 @@ Menu::Menu(string cat, string name, double price, string desc)
 MenuList::MenuList()
 {
     head = NULL;
-};
+}
 
 void MenuList::insertNode(Menu *node)
 {
@@ -250,7 +254,7 @@ void MenuList::insertNode(Menu *node)
         }
         tempNode->next = node;
     }
-};
+}
 
 void MenuList::deleteNode()
 {
@@ -312,7 +316,7 @@ bool MenuList::isEmpty()
         return 1;
     else
         return 0;
-};
+}
 
 void MenuList::editNode()
 {
@@ -388,7 +392,7 @@ void MenuList::editNode()
             cout << "HOW ARE YOU EVEN HERE?";
         }
     }
-};
+}
 
 void MenuList::displayList()
 {
@@ -421,7 +425,7 @@ void MenuList::displayList()
     } while (currNode);
     cout << endl;
     cout << endl;
-};
+}
 
 int MenuList::totalMenu()
 {
@@ -433,6 +437,142 @@ int MenuList::totalMenu()
         currNode = currNode->next;
     }
     return size;
+}
+
+Order::Order()
+{
+    cart = "";
+    customerName = "";
+    cartPrice = 0;
+    next = NULL;
+}
+
+Order::Order(string dish, string customer, double price)
+{
+    cart = dish;
+    customerName = customer;
+    cartPrice = price;
+    next = NULL;
+}
+
+void OrderQueue::createQueue()
+{
+    backPtr = NULL;
+    frontPtr = NULL;
+}
+
+void OrderQueue::destroyQueue()
+{
+    Order *temp = frontPtr;
+    while (temp)
+    {
+        frontPtr = temp->next;
+        delete temp;
+        temp = frontPtr;
+    }
+}
+
+bool OrderQueue::isEmpty()
+{
+    return (frontPtr == NULL);
+}
+
+void OrderQueue::enQueue(string fName, string cName, double fPrice)
+{
+    Order *newPtr = new Order(fName, cName, fPrice);
+    if (isEmpty())
+    {
+        frontPtr = backPtr = newPtr;
+    }
+    else
+    {
+        newPtr->next = NULL;
+        backPtr->next = newPtr;
+        backPtr = newPtr;
+    }
+}
+
+void OrderQueue::deQueue()
+{
+
+    if (isEmpty())
+    {
+        cout << "Queue is Empty" << endl;
+    }
+
+    Order *tempPtr;
+
+    tempPtr = frontPtr;
+    frontPtr = frontPtr->next;
+    tempPtr->next = NULL;
+
+    if (!frontPtr)
+        backPtr = NULL;
+
+    delete tempPtr;
+}
+
+Order OrderQueue::getFront()
+{
+    if (isEmpty())
+    {
+        cout << "Queue is Empty" << endl;
+    }
+    return *frontPtr;
+}
+
+Order OrderQueue::getRear()
+{
+    if (isEmpty())
+    {
+        cout << "Queue is Empty" << endl;
+    }
+    return *backPtr;
+}
+
+void OrderQueue::display()
+{
+    Order *currNode = frontPtr;
+    cout << "\nORDER LIST" << endl
+         << endl;
+    cout << "No  ";
+    cout << left << setw(20) << "Food"
+         << " ";
+    cout << setw(40) << "Customer"
+         << " ";
+    cout << setw(40) << "Price"
+         << " " << endl;
+    for (int i = 0; i <90; i++)
+        cout << "-";
+    cout << endl;
+    int number = 1;
+
+    if (number < 10)
+        cout << " ";
+    if (currNode)
+    {
+        cout << number << ". ";
+        cout << setw(20) << currNode->cart << " ";
+        cout << setw(40) << currNode->customerName << " ";
+        cout << setw(40) << currNode->cartPrice << endl;
+        currNode = currNode->next;
+        number++;
+        while (currNode)
+        {
+            if (number < 10)
+                cout << " ";
+            cout << number << ". ";
+            cout << setw(20) << currNode->cart << " ";
+            cout << setw(40) << currNode->customerName << " ";
+            cout << setw(40) << currNode->cartPrice << endl;
+            currNode = currNode->next;
+            number++;
+        }
+    }
+    else
+        cout << "EMPTY QUEUE, WAIT FOR A CUSTOMER TO MAKE AN ORDER" << endl;
+    cout << endl;
+    cout << endl;
 }
 
 void mehOrderAnimation()
@@ -517,91 +657,18 @@ MenuList listOfMenu()
     return listMenu;
 }
 
-void OrderQueue::createQueue()
-{
-    backPtr = NULL;
-    frontPtr = NULL;
-}
-
-void OrderQueue::destroyQueue()
-{
-    Order *temp = frontPtr;
-    while (temp)
-    {
-        frontPtr = temp->next;
-        delete temp;
-        temp = frontPtr;
-    }
-}
-
-bool OrderQueue::isEmpty()
-{
-    return (frontPtr == NULL);
-}
-
-void OrderQueue::enQueue()
-{
-    Order *newPtr;
-    
-    if (isEmpty())
-    {
-        frontPtr = backPtr = newPtr;
-    }
-    else
-    {
-        newPtr->next = NULL;
-        backPtr->next = newPtr;
-        backPtr = newPtr; 
-    }
-}
-
-void OrderQueue::deQueue()
-{
-
-    if (isEmpty()) {
-        cout << "Queue is Empty" << endl;
-    }
-
-    Order *tempPtr;
-
-    tempPtr = frontPtr;
-    frontPtr = frontPtr->next;
-    tempPtr->next = NULL;
-
-     if (!frontPtr)
-        backPtr = NULL;
-    
-    delete tempPtr;
-}
-
-Order OrderQueue::getFront()
-{
-     if (isEmpty()) {
-        cout << "Queue is Empty" << endl;
-    }
-    return *frontPtr;
-}
-
-Order OrderQueue::getRear()
-{
-     if (isEmpty()) {
-        cout << "Queue is Empty" << endl;
-    }
-    return *backPtr;
-}
-
-
 int main()
 {
     int choice;
     int proceed = 1;
     int customer = 0;
-    MenuList listMenu = listOfMenu();
+    
     RestaurantOwner admin;
     Customer cus[MAX_CUS];
-    //Order kitchenOrder;
     OrderQueue kitchenOrder;
-
+    MenuList listMenu = listOfMenu();
+    
+    kitchenOrder.createQueue();
     system("color 0B");
     mehOrderAnimation();
 
@@ -622,7 +689,6 @@ menu_utama:
     cout << "OPTION --> ";
     cin >> choice;
 
-
     while (proceed == 1)
     {
 
@@ -632,21 +698,24 @@ menu_utama:
         {
             system("cls");
             string owner_name, owner_pass;
+            makimaKitchen();
             cout << "+--------------------------------------------+" << endl;
             cout << "+----- Please Insert Username & Password ----+" << endl;
             cout << "+--------------------------------------------+" << endl;
-            cout << "Username: ";
+            cout << "\nUsername: ";
             cin >> owner_name;
             cout << "Password: ";
             cin >> owner_pass;
+
             if (owner_name == admin.getusername() && owner_pass == admin.getpassword())
             {
                 int choice_admin;
                 do
                 {
-
+                    system("cls");
+                    makimaKitchen();
                     cout << "+----------------------------------------------+" << endl;
-                    cout << "+------- HI, WELCOME TO YOUR RESTAURANT -------+" << endl;
+                    cout << "+-------- HI, WELCOME TO OUR RESTAURANT -------+" << endl;
                     cout << "+----------------------------------------------+" << endl;
                     cout << "+------ Please CHOOSE what you want to do -----+" << endl;
                     cout << "+----------------------------------------------+" << endl;
@@ -654,7 +723,7 @@ menu_utama:
                     cout << setfill(' ') << setw(20) << left << "2. Delete Menu" << endl;
                     cout << setfill(' ') << setw(20) << left << "3. Edit Menu" << endl;
                     cout << setfill(' ') << setw(20) << left << "4. Display Menu List" << endl;
-                    cout << setfill(' ') << setw(20) << left << "5. Fulfill Order" << endl;
+                    cout << setfill(' ') << setw(20) << left << "5. Customers Order" << endl;
                     cout << setfill(' ') << setw(20) << left << "6. Logout and Exit" << endl;
 
                     cin >> choice_admin;
@@ -666,6 +735,7 @@ menu_utama:
                         system("cls");
                         string tempCategory, tempName, tempDescription;
                         double tempPrice;
+                        makimaKitchen();
                         cout << "+----------------------------------------------+" << endl;
                         cout << "+------------------ ADD MENU ------------------+" << endl;
                         cout << "+----------------------------------------------+" << endl;
@@ -683,11 +753,13 @@ menu_utama:
                         Menu *newMenu = new Menu(tempCategory, tempName, tempPrice, tempDescription);
                         listMenu.insertNode(newMenu);
                         listMenu.displayList();
+
                         break;
                     }
 
                     case 2:
                         system("cls");
+                        makimaKitchen();
                         cout << "+----------------------------------------------+" << endl;
                         cout << "+----------------- DELETE MENU ----------------+" << endl;
                         cout << "+----------------------------------------------+" << endl;
@@ -696,6 +768,7 @@ menu_utama:
 
                     case 3:
                         system("cls");
+                        makimaKitchen();
                         cout << "+----------------------------------------------+" << endl;
                         cout << "+------------------ EDIT MENU -----------------+" << endl;
                         cout << "+----------------------------------------------+" << endl;
@@ -703,47 +776,68 @@ menu_utama:
                         break;
 
                     case 4:
+                        system("cls");
+                        makimaKitchen();
                         listMenu.displayList();
                         break;
 
                     case 5:
+                    {
+                        system("CLS");
+                        char orderstatus;
+                        makimaKitchen();
                         cout << "+----------------------------------------------+" << endl;
                         cout << "+---------------- FULFILL ORDER ---------------+" << endl;
                         cout << "+----------------------------------------------+" << endl;
-
-                        // FULFILL ORDER GUNAKAN DEQUEUE
+                        if (!kitchenOrder.isEmpty())
+                        {
+                            kitchenOrder.display();
+                            cout << "FULFILL THE FIRST ORDER? (Y/N) -> ";
+                            cin >> orderstatus;
+                            if (orderstatus == 'Y' || orderstatus == 'y')
+                            {
+                                kitchenOrder.deQueue();
+                                cout << "\nOrder Fulfilled\n";
+                            }
+                            else
+                                break;
+                        }
+                        else
+                        {
+                            cout << "\nNO ORDER YET, PLEASE WAIT FOR A CUSTOMER TO MAKE AN ORDER" << endl;
+                        }
+                        break;
+                    }
 
                     case 6:
                         goto menu_utama;
-                        break;
 
                     default:
                         cout << "WRONG INPUT" << endl;
                         break;
                     }
-
+                    system("PAUSE");
                 } while (choice_admin != 6);
             }
             else
             {
+                makimaKitchen();
                 cout << "+----------------------------------------------+" << endl;
                 cout << "+---------------- WARNING!!! ------------------+" << endl;
                 cout << "+----------------------------------------------+" << endl;
                 cout << "+------ WRONG USERNAME & PASSWORD INSERT ------+" << endl;
                 cout << "+----------------------------------------------+" << endl;
-                system("PAUSE");
             }
             goto menu_utama;
-            break;
         }
         case 2:
-
+            system("cls");
+            makimaKitchen();
             cus[customer].create();
             customer++;
             cout << "Customer Details Added" << endl;
             system("PAUSE");
             goto menu_utama;
-            break;
 
         case 3:
         {
@@ -751,10 +845,14 @@ menu_utama:
             string cusUsername, cusPassword;
             int successfulLogin = 0, customerIndex;
             cin.ignore();
-
-            cout << "\nPlease enter your username: ";
+            system("cls");
+            makimaKitchen();
+            cout << "+--------------------------------------------+" << endl;
+            cout << "+----- Please Insert Username & Password ----+" << endl;
+            cout << "+--------------------------------------------+" << endl;
+            cout << "\nUsername: ";
             getline(cin, cusUsername);
-            cout << "\nPlease enter your password: ";
+            cout << "\nPassword: ";
             getline(cin, cusPassword);
 
             for (int i = 0; i < MAX_CUS; i++)
@@ -773,13 +871,11 @@ menu_utama:
 
             if (successfulLogin == 1)
             {
-                system("cls");
                 int choicecustomer;
                 do
                 {
                     system("cls");
                     makimaKitchen();
-
                     cout << "\n+----------------------------------------------+" << endl;
                     cout << "+------------ Choose any option :D ------------+" << endl;
                     cout << "+----------------------------------------------+" << endl
@@ -794,54 +890,92 @@ menu_utama:
                         system("cls");
                         makimaKitchen();
                         listMenu.displayList();
-                        system("PAUSE");
                         break;
                     case 2:
-
+                    {
                         system("cls");
                         makimaKitchen();
                         listMenu.displayList();
                         cout << endl;
 
                         int menuIndex;
-                        cout << "Enter the menu index [1..." << listMenu.totalMenu() << "] you wish to order ";
+                        cout << "Enter the menu index [1..." << listMenu.totalMenu() << "] you wish to order " << endl;
+                        cout << "---> ";
                         cin >> menuIndex;
 
-                        // kitchenOrder enqueue
-                       // Order *tempOrder = new Order;
-                        // NEED TO ENQUEUE THE MENU
-
                         Menu *temp = listMenu.head;
-                        int index;
-                        for (int i = 0; i < listMenu.totalMenu(); i++)
+                        for (int i = 1; i < menuIndex; i++)
                         {
-                            temp = new Menu(i);
                             temp = temp->next;
                         }
-                        
-
-                        cout << "Thank you for your order. You can proceed to your cart for purchase purposes" << endl;
-                        system("PAUSE");
-                        goto menu_utama;
+                        totalPrice = temp->foodPrice;
+                        kitchenOrder.enQueue(temp->foodName, cus[customerIndex].getcustomerName(), temp->foodPrice);
+                        cout << "\nTOTAL PRICE: " << temp->foodPrice << endl;
+                        cout << "Thank you for your order. Please pay the food at the counter." << endl;
                         break;
-
+                    }
                     case 3:
                         goto menu_utama;
-                        break;
 
                     default:
                         cout << "WRONG INPUT. PLEASE PRESS YOUR KEYBOARD PROPERLY" << endl;
-                        system("PAUSE");
                         break;
                     }
-
+                    system("PAUSE");
                 } while (choicecustomer != 3);
             }
             goto menu_utama;
-            break;
         }
         case 4:
-            cout << "Thank you for using the system" << endl;
+            system("cls");
+            cout << "\n   _______  __   __  _______  __    _  ___   _    __   __  _______  __   __" << endl;
+            cout << "  |       ||  | |  ||   _   ||  |  | ||   | | |  |  | |  ||       ||  | |  |" << endl;
+            cout << "  |_     _||  |_|  ||  |_|  ||   |_| ||   |_| |  |  |_|  ||   _   ||  | |  |" << endl;
+            cout << "    |   |  |       ||       ||       ||      _|  |       ||  | |  ||  |_|  |" << endl;
+            cout << "    |   |  |       ||       ||  _    ||     |_   |_     _||  |_|  ||       |" << endl;
+            cout << "    |   |  |   _   ||   _   || | |   ||    _  |    |   |  |       ||       |" << endl;
+            cout << "    |___|  |__| |__||__| |__||_|  |__||___| |_|    |___|  |_______||_______|  - MAKIMA'S KITCHEN" << endl;
+            cout << R"(    *****************,(((((((((((((((((((((((((((((((((* *****************
+    *************,((((((((((((((((((((((((((((((((((((((((*(.*************
+    ***********((((((((((((((((((((((((((((.,,*((((((((((((((((***********
+    *********/((((((((((((/,((((((/((((((*,*(((((((((((((((((((((.********
+    *******,(((((((((((,,/((((/(((((((((.(((*((((((((((((((.(((((((,******
+    ******.(.((((((((,(((((((,((((((((( (,(((((((((((/,(((((*(((((((/*****
+    ***** /((((((((,(((((((((/(/((((((*,((((*(*((((((,((((/((((((/((((,***
+    ****,*(((((((*,(((((((((((,((((((((*((,((/(((.(((,(((( ((((((*((/(,***
+    ****/(((((((.,(((((((((,/(/((((((**((.(.**((  ((.,(*(((((,(((((((*,.**
+    ***/(((((((,,/,((((/ (((,(((((((/,,(,./@/((/(((. ,(((/(((/((.((((,,,,*
+    **.((((((((,*/,,,/(((((*,,(((((( #%,((@,(,,##/@((////#@(,(/(,,(((,,,.*
+    **((((/((/@&@@.,,,,. /@&*(((((((@#         .&&%@#/(#&@%/((/((,((/,,,.*
+    *.(((/*(.((.&*@&#(#&&&@&*((((((*&&&&./(#%#@@ %@@@@&@@@,/(#(.(.(,*.,,**
+    **((((,(&(&((,@@@&&&@@@@ ((((((*&&&@@(.,@@&@@@&@@@@@@@&@&%&(*,*(..,,**
+    */(*((,(.@@//(,@@@@@@@@@*(((((((@@@@@@@@@&&&@@@@@@@@@# * @, .,*...****
+    *((/*(**//@@@&(#@@@@@@@&*((((((%@@@@@@@@@@@@@@@@@@@@@((#,@#,,,,,******
+    *,((.((,.((,&@@@@&@@@@@@.((((((&@@@@@@@@@@@@@@@@@@@&@&@@&%,,,,,*******
+    **/(*,((,(,((,,..&@@@@&&,(((((#@@@@@@@@@@@@@@@@@@@&@@@/@@&.,,,,*******
+    ***,/.,((.,//,,*&,&&@@@@*((((((@@@@@@@@@@@@@@@@@@@@&&&&@@&.,,,,*******
+    ****.,.,,,,,,,,#@@@@&&&@(((/((/@@@@@@@@@@@@@@@@@@&&@&@@@@*,,,,,*******
+    *****,..,,,,,,,%@@&@@@@&(((*((/@@@@@@@@@@@&@*&&@&&@@@@@&.,*,,(.*******
+    *********.,,,,,@&&@@@&@@%((,((/@@@@@@@@@@@@@@&@@@&&@@@&*,,/,((,*******
+    *******.((((,,.@@@@@@@&@&((,((/%@@@@@@@@@@@@@@@@@@@@@.**,,/(((********
+    ******(((/,,.,,&&@@@@&@&@((,((/(@@@@@@@@@@@&@@@@@&@*****,,(((/********
+    *****.((*..,,,(@&@@@@@@&@.(,((((((#@@&@&@@@@@@@@@&,*****,((((,********
+    *******(/,,.@&&@@#*#@@@@@*(/((((((((/,/%&@@@&&@&,*******,((((.********
+    *****,.(((*@@@@@@@&&@@@@*%(/((#((((((((.****************,/(((,********
+    *.(*(((((@&@@@@@@@@@@@@@&&*(/((/((((((******************,,(((*********
+     ,/,/(/%&&@@@@@@@@@@@@@@@@%(*(((@.((((,*****************.*((.*********
+    &&&&(/(%./&&&#@@@@@@@@@@@@@*,((*&&&@,//%%,**************.(((**********
+    &&&&&&&&&&&&@(&@,&@&@@@@@@@&/((/@@@@@@&(//&/************,((/**********
+    &&&&&&&&&&@@@@@@&&&/&&&@@&@@/.((@@@&@  ...   ************((.**********
+    &&&&&&&&&&&&@@@@@&&&@((@@@&@&,((,@&% ......  ***********/((***********
+    &&&&&&&&&&&&&@@@@@&@*#@//%@@@@*(/%,/,......  .**********((.***********
+    &&&&/&&&&&&&@@@@@@@@@@@@@///#@@/,,*///,...... //.******.(*************
+    &&#&&&&&&&&&&&&@@@@@@@@@@@@@@@&&,@@&&@@&, .... ////*******************
+    /&&/&&&&&&&&&@@@@@@@@@@@@@@@@@@@@&@@**//#&  ..  /////(/,**************
+    /(&&(&&&&&&&&&&&&@@@@@@@@@@@@@@@@@@@@@&@@,//*  ... //,(&(*************
+    /*&&&&&&&&&&&&&&@,@&@@@@@@@@@@@@@@@@@@@@&/%@@#. .,***###((/%####%##%##
+    //#&/&&&&&/&&&(@&&@@@@@@@@@@@@@@@@@@@@@@&&&&&%##******(#/(#/##########)"
+                 << endl;
             system("PAUSE");
             proceed = 0;
             break;
@@ -850,7 +984,6 @@ menu_utama:
             cin.clear();
             cin.ignore();
             goto menu_utama;
-            break;
         }
     }
     return 0;
